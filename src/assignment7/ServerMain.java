@@ -20,10 +20,13 @@ package assignment7;
 
 
 
-public class Main 
+public final class ServerMain 
 {
 	
-	
+	public static void main(String[] args) 
+	{
+		
+	}
 	
 	
 	
