@@ -14,16 +14,27 @@
  */
 package assignment7;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public final class ClientMain extends Application
 {
 	
-	public static void main(String[] args) 
-	{
-		
-	}
+	private Socket login_socket;
+	private Socket chat_socket;
+	private PrintWriter login_writer;
+	private PrintWriter	chat_writer;
+	private BufferedReader login_reader;
+	private BufferedReader chat_reader;
+	
+	
+	
+	public static void main(String[] args) {launch();}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -31,6 +42,24 @@ public final class ClientMain extends Application
 		
 	}
 	
-	
+	private void setupNetworking() throws Exception 
+	{
+		try 
+		{
+			login_socket= new Socket(ports.host, ports.login);
+			chat_socket= new Socket(ports.host,ports.login);
+		}
+		catch (Exception e){e.printStackTrace();}
+		
+		try 
+		{
+			login_writer= new PrintWriter(login_socket.getOutputStream());
+			login_reader= new BufferedReader(new InputStreamReader(login_socket.getInputStream()));
+			chat_writer= new PrintWriter(chat_socket.getOutputStream());
+			chat_reader= new BufferedReader(new InputStreamReader(chat_socket.getInputStream()));
+		}
+		catch(Exception e1){e1.printStackTrace();}
+		
+	}
 	
 }

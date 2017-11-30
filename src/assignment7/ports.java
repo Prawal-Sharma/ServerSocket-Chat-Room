@@ -19,6 +19,10 @@ package assignment7;
 //add as we go
 
 public final class ports{
+	public static final String host= "localhost";
+	
+	
+	
 	public static final int login= 8880;
 	public static final int chat= 8888;
 	
