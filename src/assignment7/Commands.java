@@ -18,13 +18,15 @@ package assignment7;
 
 //add as we go
 
+//contains all the commands we will send between server and client to do specified action
+//strings have *&$ at the front to make it unique and unreplicable 
 public final class Commands{
 	public static final String InvalidUsername = "*&$invalusername";
 	public static final String MakeUser = "*&$makeusr";
 	public static final String ChangePassword = "*&$changepswd";
 	
-	
-	
-	
+	public static final String Quit = "*&$Quit";
+	public static final String AddFriend= "*&$AddFriend";
+	public static final String MakeNewChat = "*&$makenewchat";
 	
 }
