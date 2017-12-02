@@ -61,7 +61,7 @@ public final class ServerMain
 		try{
 			boolean controller=true;
 			
-			ServerSocket Server  = new ServerSocket(4580);
+			ServerSocket Server  = new ServerSocket(ports.chat);
 			FileStruct();
 			 users_connected = new HashMap<String, O_Print>();
 			 friendreq  =new HashMap<String,BufferedReader> ();
@@ -69,6 +69,7 @@ public final class ServerMain
 			while (controller){
 				
 				Socket newsock = Server.accept();
+				
 				System.out.println("Network Established");
 				
 				
