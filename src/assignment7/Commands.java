@@ -24,9 +24,11 @@ public final class Commands{
 	public static final String InvalidUsername = "*&$invalusername";
 	public static final String MakeUser = "*&$makeusr";
 	public static final String ChangePassword = "*&$changepswd";
-	
+	public static final String UpdateChat = "*&$updatechat";
 	public static final String Quit = "*&$Quit";
+	public static final String StopUpdating = "*&$stopupdating";
 	public static final String AddFriend= "*&$AddFriend";
 	public static final String MakeNewChat = "*&$makenewchat";
-	
+	public static final String LoginSuccess = "*&$loginsucess";
+	public static final String RecieveMessage = "*&$recievemessage";		//server to client for client to recieve and output a message sent to them
 }
