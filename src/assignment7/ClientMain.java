@@ -17,13 +17,17 @@ package assignment7;
 
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
+
+
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -42,6 +46,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -94,9 +100,11 @@ public final class ClientMain extends Application
 	private static HBox signinHBox ;
 	private static HBox newuserHBox ;
 	
-	static Timeline listener;
+	private static Timeline listener;
 	private static int encryptionoffset = 1;
 	
+	private Media sound = new Media (new File("ding.wav").toURI().toString());
+	private MediaPlayer mediaplayer;
 	private static String command;
 	private static String parameter;
 	private static String activeconversation;
@@ -112,7 +120,7 @@ public final class ClientMain extends Application
 		
 		initjavafx();
 		startliseners();
-		
+		mediaplayer=new MediaPlayer(sound);
 		primaryStage.setScene(signinScene);
 		primaryStage.show();
 		
@@ -129,7 +137,7 @@ public final class ClientMain extends Application
 		sendbuttonlistener();
 		sendchatenterlisterner();
 		startchatlistener();
-		
+		addfriendbuttonlistener();
 		closechatlistner();
 		addfriendbuttonlistner();
 		acceptbuttonlistner();
@@ -138,6 +146,11 @@ public final class ClientMain extends Application
 		exitbuttonlistener();
 		
 	}
+	private void addfriendbuttonlistener() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * allows for chat to be sent with press of enterbutton
 	 */
@@ -199,7 +212,29 @@ public final class ClientMain extends Application
 
 	private void startchatlistener() {
 		// TODO Auto-generated method stub
-		
+		startchatButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				listener.stop();
+				groupchatmembers.add(userName);
+				activeconversation= new String();
+				Collections.sort(groupchatmembers);
+				for (String friend: groupchatmembers)
+				{
+					activeconversation+=friend;
+					chat_writer.println(friend);
+					chat_writer.flush();
+				}
+				chat_writer.println(Commands.EndofList);
+				chat_writer.flush();
+				chatArea.clear();
+				groupchatmembers.remove(userName);
+				listener.play();
+			}
+			
+		});
 	}
 
 	private void changepassowrdlistener() 

@@ -28,6 +28,7 @@ public final class Commands{
 	public static final String UpdateChat = "*&$updatechat";
 	public static final String Quit = "*&$Quit";
 	public static final String CloseChat = "*&$closechat";
+	public static final String EndofList = "*&$endof list";
 	public static final String StopUpdating = "*&$stopupdating";
 	public static final String AddFriend= "*&$AddFriend";
 	public static final String MakeNewChat = "*&$makenewchat";
