@@ -15,6 +15,7 @@
 package assignment7;
 
 import java.awt.TextArea;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +25,13 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,6 +40,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public final class ClientMain extends Application
 {
@@ -48,10 +55,11 @@ public final class ClientMain extends Application
 	private static ArrayList<String> friends= new ArrayList<String>();
 	private static ArrayList<String> groupchatmembers = new ArrayList<String>();
 	
+	private static Stage newStage;
 	private static Scene signinScene;
 	private static Scene chatScene;
 	private static GridPane scenePane ;
-	private static GridPane contolpane ;
+	private static GridPane controlPane ;
 	private static TextArea chatArea ;
 	private static TextField chatField ;
 	private static TextField friendField;
@@ -101,6 +109,7 @@ public final class ClientMain extends Application
 		// TODO Auto-generated method stub
 		
 		initjavafx();
+		startliseners();
 		
 		primaryStage.setScene(signinScene);
 		primaryStage.show();
@@ -108,10 +117,17 @@ public final class ClientMain extends Application
 		
 		
 	}
+	private void startliseners() {
+		// TODO Auto-generated method stub
+		
+		
+		signinlistener();
+	}
+
 	private void initjavafx()
 	{
 		scenePane = new GridPane();
-		contolpane = new GridPane();
+		controlPane = new GridPane();
 		chatArea = new TextArea();
 		chatField = new TextField();
 		friendField = new TextField();
@@ -140,10 +156,26 @@ public final class ClientMain extends Application
 		passwordVBox = new VBox();
 		signinHBox = new HBox();
 		newuserHBox = new HBox();
+		
+		initsigninpane();
+		initcontrolpane();
 		signinScene=new Scene(signinPane );
-		contolpane.add(controlVBox, 0,0 );
-		contolpane.add(chatPane, 1,0);
+		
 	}
+	private void initcontrolpane() {
+		// TODO Auto-generated method stub
+		
+		controlPane.setHgap(24);
+		controlPane.setAlignment(Pos.CENTER);
+		controlPane.add(controlVBox, 0,0 );
+		controlPane.add(chatPane, 1,0);
+	}
+
+	private void initsigninpane() {
+		// TODO Auto-generated method stub
+		signinPane.setAlignment(Pos.TOP_CENTER);
+	}
+
 	/**
 	 * setup  socket
 	 * @throws Exception
@@ -167,13 +199,116 @@ public final class ClientMain extends Application
 		catch(Exception e1){e1.printStackTrace();}
 		socketconnected=true;
 	}
+	/**
+	 * listener to sign in user
+	 */
+	private void signinlistener()
+	{
+		loginButton.setOnAction( new EventHandler<ActionEvent>() 
+		{
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				if (socketconnected == false) 
+				{
+					try {
+						setupNetworking();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				chat_writer.println(Commands.Login);
+				chat_writer.flush();
+				chat_writer.println(usernameField.getText());
+				chat_writer.flush();
+				chat_writer.println(passwordField.getText());
+				chat_writer.flush();
+				
+				String read = null;
+				try {
+					for(;;)										//wait for server to process request
+					{
+						read=null;
+						read=chat_reader.readLine();
+						if (!(read==null)) 
+						{
+							break;
+						}
+					}
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (read==Commands.LoginSuccess)
+				{
+					usernameLabel.setText(usernameField.getText());
+					userName=usernameField.getText();
+					
+					configurechatcontrols();
+					
+					chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
+					newStage.setScene(chatScene);
+					newStage.show();
+					listener = new Timeline(new KeyFrame(Duration.seconds(0.2), ae -> 
+					{
+						try { listentoserver(); }
+						catch (IOException e) { e.printStackTrace(); }
+					}));
+					listener.setCycleCount(Animation.INDEFINITE);
+					listener.play();
+				}
+				
+				
+			}
+
+			
+			
+		});
+	}
+	
+	/**
+	 * listener to send messages
+	 */
+	private void sendbuttonlistener()
+	{
+		sendButton.setOnAction( new EventHandler<ActionEvent >() 
+		{
+
+			@Override
+			public void handle(ActionEvent event) 
+			{
+				// TODO Auto-generated method stub
+				listener.stop();
+				chat_writer.println(Commands.SendMessage);
+				chat_writer.flush();
+				chat_writer.println(activeconversation);
+				chat_writer.flush();
+				chat_writer.println(userName+ ": "+chatField.getText());
+				chat_writer.flush();
+				chatField.setText("");
+				listener.play();
+			}
+			
+		});
+	}
+	
+	private void configurechatcontrols() 
+	{
+				// TODO Auto-generated method stub
+				
+	}
 	
 	/**
 	 * listen to server commands
 	 * @throws IOException
 	 */
 	@SuppressWarnings("deprecation")
-	private static void listen() throws IOException {
+	private static void listentoserver() throws IOException 
+	{
 		
 		if (chat_reader.ready()) 
 		{
@@ -232,13 +367,19 @@ public final class ClientMain extends Application
 		}
 	}
 
+	
+	
+	
 	/**
 	 * adds friend to friend list
 	 */
-	private static void addfriend() {
+	private static void addfriend() 
+	{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 	private static String encode(String str, int offset)
 	{
 		
