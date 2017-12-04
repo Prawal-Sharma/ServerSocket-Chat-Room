@@ -81,6 +81,9 @@ public final class ClientMain extends Application
 	private static TextArea chatArea ;
 	private static TextField chatField ;
 	private static TextField friendField;
+	
+	private static TextField friendstochatField;
+	
 	private static TextField changepasswordField;
 	private static Button changepasswordButton;
 	private static Button addfriendButton ;
@@ -95,6 +98,9 @@ public final class ClientMain extends Application
 	private static GridPane chatPane;
 	private static HBox changePassHBox ;
 	private static VBox controlVBox ;
+	private static Label friendrequestlabel;
+	
+	
 	
 	private static GridPane signinPane ;
 	private static String userName;
@@ -136,6 +142,10 @@ public final class ClientMain extends Application
 		
 		
 	}
+	
+	/**
+	 * start all the button listeners
+	 */
 	private void startliseners() 
 	{
 		// TODO Auto-generated method stub
@@ -156,7 +166,34 @@ public final class ClientMain extends Application
 	}
 	private void addfriendbuttonlistener() {
 		// TODO Auto-generated method stub
-		
+		addfriendButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				if (!(friendField.getText().equals(userName)||friendField.getText().equals("")))
+				{
+					listener.stop();
+					
+					
+					chat_writer.println(Commands.AddFriend);
+					chat_writer.flush();
+					chat_writer.println(friendField.getText());
+					chat_writer.flush();
+					chat_writer.println(userName);
+					chat_writer.flush();
+					friendField.clear();
+				
+					listener.play();
+					
+				}
+				else
+				{
+					friendField.clear();
+				}
+			}
+			
+		});
 	}
 
 	/**
@@ -179,7 +216,6 @@ public final class ClientMain extends Application
 			
 		});
 	}
-
 
 	private void closechatlistner() {
 		// TODO Auto-generated method stub
@@ -205,12 +241,51 @@ public final class ClientMain extends Application
 
 	private void denybuttonlistener() {
 		// TODO Auto-generated method stub
-		
+		denyButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) 
+			{
+				// TODO Auto-generated method stub
+				listener.stop();
+				String friend= friendrequestlabel.getText();
+				friendrequestlabel.setText("");				//clear the label
+				chat_writer.println(Commands.FriendReject);
+				chat_writer.flush();
+				chat_writer.println(friend);
+				chat_writer.flush();
+				chat_writer.println(userName);
+				chat_writer.flush();
+				acceptButton.setDisable(true);
+				denyButton.setDisable(true);				//diable the buttons
+				listener.play();
+			}
+		});
 	}
 
 	private void acceptbuttonlistner() {
 		// TODO Auto-generated method stub
-		
+		acceptButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) 
+			{
+				// TODO Auto-generated method stub
+				listener.stop();
+				String friend= friendrequestlabel.getText();
+				friendrequestlabel.setText("");				//clear the label
+				chat_writer.println(Commands.FriendConfirm);
+				chat_writer.flush();
+				chat_writer.println(friend);
+				chat_writer.flush();
+				chat_writer.println(userName);
+				chat_writer.flush();
+				acceptButton.setDisable(true);
+				denyButton.setDisable(true);				//diable the buttons
+				listener.play();
+			}	
+			
+		});
 	}
 
 	private void startchatlistener() {
@@ -221,6 +296,13 @@ public final class ClientMain extends Application
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				listener.stop();
+				
+				String recipients[]= friendstochatField.getText().split(",");
+				
+				for (String s: recipients)
+				{
+					groupchatmembers.add(s);
+				}
 				groupchatmembers.add(userName);
 				activeconversation= new String();
 				Collections.sort(groupchatmembers);
@@ -416,16 +498,17 @@ public final class ClientMain extends Application
 		passwordVBox.getChildren().addAll(passwordLabel,passwordField);
 		usernameVBox.getChildren().addAll(usernameLabel,usernameField);
 		usernameVBox.setPadding(new Insets(10,0,10,0));
-		passwordVBox.setPadding(new Insets(10,0,20,0));
-		newuserHBox.setAlignment(Pos.CENTER_RIGHT);
-		signinHBox.setAlignment(Pos.CENTER_LEFT);
-		signinHBox.getChildren().add(loginButton);
+		passwordVBox.setPadding(new Insets(10,0,10,0));
+		newuserHBox.setAlignment(Pos.CENTER);
+		newuserHBox.setPadding(new Insets(10,0,10,0));
+		signinHBox.setAlignment(Pos.CENTER);
 		
+		signinHBox.getChildren().add(loginButton);
 		newuserHBox.getChildren().add(createButton);
 		signinPane.add(titleBox, 0, 0);
 		signinPane.add(usernameVBox, 0,1, 2, 2);
 		signinPane.add(passwordVBox,0, 5, 2, 2);
-		signinPane.add(signinHBox, 0, 13);
+		signinPane.add(signinHBox, 0, 12);
 		signinPane.add(newuserHBox, 0, 13);
 		
 	}
@@ -497,7 +580,9 @@ public final class ClientMain extends Application
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (read==Commands.LoginSuccess)
+				
+				if(true)
+				//if (read==Commands.LoginSuccess)
 				{
 					usernameLabel.setText(usernameField.getText());
 					userName=usernameField.getText();
@@ -518,10 +603,7 @@ public final class ClientMain extends Application
 					listener.play();
 				}
 				
-				
 			}
-
-			
 			
 		});
 	}
@@ -555,6 +637,9 @@ public final class ClientMain extends Application
 	private void configurechatcontrols() 
 	{
 			// TODO Auto-generated method stub
+		
+		
+		
 				
 	}
 	
@@ -572,14 +657,41 @@ public final class ClientMain extends Application
 			switch(command) 
 			{
 
-			case Commands.AddFriend:
-				parameter = chat_reader.readLine();
-				if (!friends.contains(parameter)) 
+			case Commands.FriendConfirm:
+				parameter=chat_reader.readLine();
+
+				if (parameter==userName)
 				{
 
-					addfriend();
+
+					parameter = chat_reader.readLine();
+					if (!friends.contains(parameter)) 
+					{
+						friends.add(parameter);
+
+
+					}
 				}
 				break;
+				
+				
+			case Commands.AddFriend:
+				parameter= chat_reader.readLine();
+				if (userName.equals(parameter))
+				{
+					parameter=chat_reader.readLine();
+					
+					if (!friends.contains(parameter))
+					{
+						friendrequestlabel.setText(parameter);
+						acceptButton.setDisable(false);
+						denyButton.setDisable(false);
+						
+					}
+				}
+				break;
+			
+			
 			case Commands.UpdateChat:
 				parameter = chat_reader.readLine();
 
@@ -623,18 +735,6 @@ public final class ClientMain extends Application
 		}
 	}
 
-	
-	
-	
-	/**
-	 * adds friend to friend list
-	 */
-	private static void addfriend() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	private static String encode(String str, int offset)
 	{
