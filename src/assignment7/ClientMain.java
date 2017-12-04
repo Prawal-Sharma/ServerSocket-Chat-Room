@@ -14,7 +14,7 @@
  */
 package assignment7;
 
-import java.awt.TextArea;
+
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +35,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -71,7 +74,6 @@ public final class ClientMain extends Application
 	private static Button startchatButton;
 	private static Button exitButton ;
 	private static Button acceptButton ;
-	
 	private static Button denyButton ;
 	private static GridPane friendPane ;
 	private static GridPane requestPane;
@@ -106,7 +108,7 @@ public final class ClientMain extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{
-		// TODO Auto-generated method stub
+		
 		
 		initjavafx();
 		startliseners();
@@ -117,11 +119,194 @@ public final class ClientMain extends Application
 		
 		
 	}
-	private void startliseners() {
+	private void startliseners() 
+	{
 		// TODO Auto-generated method stub
 		
 		
 		signinlistener();
+		createnewuserlistner();
+		sendbuttonlistener();
+		sendchatenterlisterner();
+		startchatlistener();
+		
+		closechatlistner();
+		addfriendbuttonlistner();
+		acceptbuttonlistner();
+		denybuttonlistener();
+		changepassowrdlistener();
+		exitbuttonlistener();
+		
+	}
+	/**
+	 * allows for chat to be sent with press of enterbutton
+	 */
+	private void sendchatenterlisterner() 
+	{
+		// TODO Auto-generated method stub
+		chatField.setOnKeyPressed(new EventHandler< KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				// TODO Auto-generated method stub
+				if (event.getCode().equals(KeyCode.ENTER))
+				{
+					if (chatField.getText().equals("")){}		//ensure field is not empty
+					else {sendButton.fire();}				//do send message event 
+				}
+			}
+			
+		});
+	}
+
+	private void addfriendbuttonlistner() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void closechatlistner() {
+		// TODO Auto-generated method stub
+		closechatButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				listener.stop();			//stop listening to server commands
+				chat_writer.println(Commands.CloseChat);
+				chat_writer.flush();
+				chat_writer.println(activeconversation);
+				chat_writer.flush();
+				chat_writer.println(userName);
+				chat_writer.flush();
+				chatArea.clear();
+				listener.play();
+				
+			}			
+			
+		});
+	}
+
+	private void denybuttonlistener() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void acceptbuttonlistner() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void startchatlistener() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void changepassowrdlistener() 
+	{
+		// TODO Auto-generated method stub
+		changepasswordButton.setOnAction(new EventHandler<ActionEvent>() 
+		{
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				listener.stop();
+				chat_writer.println(Commands.ChangePassword);
+				chat_writer.flush();
+				chat_writer.println(changepasswordField.getText());
+				chat_writer.flush();
+				changepasswordField.clear();
+				listener.play();
+			}
+			
+		});
+	}
+
+	private void exitbuttonlistener() {
+		// TODO Auto-generated method stub
+		exitButton.setOnAction(new EventHandler<ActionEvent>()
+		{
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				chat_writer.println(Commands.Quit);
+				chat_writer.flush();
+				listener.stop();
+				newStage.close(); 
+		//		System.exit(0);
+			}
+			
+		});
+		
+	}
+
+	private void createnewuserlistner() {
+		// TODO Auto-generated method stub
+		createButton.setOnAction(new EventHandler<ActionEvent>() 
+		{
+
+			@Override
+			public void handle(ActionEvent event) 
+			{
+				// TODO Auto-generated method stub
+				if (socketconnected == false) 
+				{
+					try {
+						setupNetworking();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+				chat_writer.println(Commands.MakeUser);
+				chat_writer.flush();
+				chat_writer.println(usernameField.getText());
+				chat_writer.flush();
+				chat_writer.println(passwordField.getText());
+				chat_writer.flush();
+
+				String read = null;
+				try {
+					for(;;)										//wait for server to process request
+					{
+						read=null;
+						read=chat_reader.readLine();
+						if (!(read==null)) 
+						{
+							break;
+						}
+					}
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if (read==Commands.LoginSuccess)
+				{
+					usernameLabel.setText(usernameField.getText());
+					userName=usernameField.getText();
+
+					configurechatcontrols();
+
+					chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
+					newStage.setScene(chatScene);
+					newStage.show();
+
+					//setup a listener that polls server every .2 seconds
+					listener = new Timeline(new KeyFrame(Duration.seconds(0.2), ae -> 
+					{
+						try { listentoserver(); }
+						catch (IOException e) { e.printStackTrace(); }
+					}));
+					listener.setCycleCount(Animation.INDEFINITE);
+					listener.play();
+				}
+
+			}
+		}); 
 	}
 
 	private void initjavafx()
@@ -129,6 +314,7 @@ public final class ClientMain extends Application
 		scenePane = new GridPane();
 		controlPane = new GridPane();
 		chatArea = new TextArea();
+		chatArea.setWrapText(true);
 		chatField = new TextField();
 		friendField = new TextField();
 		changepasswordField = new TextField();
@@ -162,6 +348,7 @@ public final class ClientMain extends Application
 		signinScene=new Scene(signinPane );
 		
 	}
+	
 	private void initcontrolpane() {
 		// TODO Auto-generated method stub
 		
@@ -253,6 +440,8 @@ public final class ClientMain extends Application
 					chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
 					newStage.setScene(chatScene);
 					newStage.show();
+				
+					//setup a listener that polls server every .2 seconds
 					listener = new Timeline(new KeyFrame(Duration.seconds(0.2), ae -> 
 					{
 						try { listentoserver(); }
@@ -287,7 +476,7 @@ public final class ClientMain extends Application
 				chat_writer.flush();
 				chat_writer.println(activeconversation);
 				chat_writer.flush();
-				chat_writer.println(userName+ ": "+chatField.getText());
+				chat_writer.println(userName+ ": "+encode(chatField.getText(), encryptionoffset));
 				chat_writer.flush();
 				chatField.setText("");
 				listener.play();
@@ -298,7 +487,7 @@ public final class ClientMain extends Application
 	
 	private void configurechatcontrols() 
 	{
-				// TODO Auto-generated method stub
+			// TODO Auto-generated method stub
 				
 	}
 	
@@ -329,7 +518,7 @@ public final class ClientMain extends Application
 
 				if (parameter.equals(activeconversation)) 
 				{
-					chatArea.setText("");
+					chatArea.clear();
 					parameter = chat_reader.readLine();
 					while (!parameter.equals(Commands.StopUpdating)) 
 					{
