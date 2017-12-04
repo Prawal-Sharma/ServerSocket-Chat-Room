@@ -35,6 +35,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -43,11 +44,19 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -103,8 +112,8 @@ public final class ClientMain extends Application
 	private static Timeline listener;
 	private static int encryptionoffset = 1;
 	
-	private Media sound = new Media (new File("ding.wav").toURI().toString());
-	private MediaPlayer mediaplayer;
+//	private Media sound = new Media (new File("ding.wav").toURI().toString());
+//	private MediaPlayer mediaplayer;
 	private static String command;
 	private static String parameter;
 	private static String activeconversation;
@@ -120,7 +129,7 @@ public final class ClientMain extends Application
 		
 		initjavafx();
 		startliseners();
-		mediaplayer=new MediaPlayer(sound);
+	//	mediaplayer=new MediaPlayer(sound);
 		primaryStage.setScene(signinScene);
 		primaryStage.show();
 		
@@ -139,7 +148,6 @@ public final class ClientMain extends Application
 		startchatlistener();
 		addfriendbuttonlistener();
 		closechatlistner();
-		addfriendbuttonlistner();
 		acceptbuttonlistner();
 		denybuttonlistener();
 		changepassowrdlistener();
@@ -172,11 +180,6 @@ public final class ClientMain extends Application
 		});
 	}
 
-	private void addfriendbuttonlistner() 
-	{
-		// TODO Auto-generated method stub
-		
-	}
 
 	private void closechatlistner() {
 		// TODO Auto-generated method stub
@@ -396,6 +399,35 @@ public final class ClientMain extends Application
 	private void initsigninpane() {
 		// TODO Auto-generated method stub
 		signinPane.setAlignment(Pos.TOP_CENTER);
+		
+		 Text title = new Text("Sign In");
+	        title.setFont(Font.font("Helvetica", 45));
+	        title.setFill(Color.BLUE);
+	        VBox titleBox = new VBox();
+
+	        titleBox.setPadding(new Insets(0,0,0,0));
+	        titleBox.getChildren().add(title);
+	        titleBox.setAlignment(Pos.CENTER);
+		
+		Stop[] stops = new Stop[] { new Stop(0, Color.rgb(204, 255, 204)), new Stop(1, Color.WHITE)};
+		LinearGradient gradient = new LinearGradient(0,0, 0,1.5, true, CycleMethod.NO_CYCLE, stops);
+	    signinPane.setBackground(new Background(new BackgroundFill(gradient, null, new Insets(-10))));
+		signinPane.setPadding(new Insets(30,30,30,30));
+		passwordVBox.getChildren().addAll(passwordLabel,passwordField);
+		usernameVBox.getChildren().addAll(usernameLabel,usernameField);
+		usernameVBox.setPadding(new Insets(10,0,10,0));
+		passwordVBox.setPadding(new Insets(10,0,20,0));
+		newuserHBox.setAlignment(Pos.CENTER_RIGHT);
+		signinHBox.setAlignment(Pos.CENTER_LEFT);
+		signinHBox.getChildren().add(loginButton);
+		
+		newuserHBox.getChildren().add(createButton);
+		signinPane.add(titleBox, 0, 0);
+		signinPane.add(usernameVBox, 0,1, 2, 2);
+		signinPane.add(passwordVBox,0, 5, 2, 2);
+		signinPane.add(signinHBox, 0, 13);
+		signinPane.add(newuserHBox, 0, 13);
+		
 	}
 
 	/**
@@ -530,7 +562,7 @@ public final class ClientMain extends Application
 	 * listen to server commands
 	 * @throws IOException
 	 */
-	@SuppressWarnings("deprecation")
+
 	private static void listentoserver() throws IOException 
 	{
 		
