@@ -23,12 +23,19 @@ package assignment7;
 public final class Commands{
 	public static final String InvalidUsername = "*&$invalusername";
 	public static final String MakeUser = "*&$makeusr";
+	public static final String Login = "*&$login";
 	public static final String ChangePassword = "*&$changepswd";
 	public static final String UpdateChat = "*&$updatechat";
 	public static final String Quit = "*&$Quit";
+	public static final String CloseChat = "*&$closechat";
+	public static final String EndofList = "*&$endof list";
 	public static final String StopUpdating = "*&$stopupdating";
 	public static final String AddFriend= "*&$AddFriend";
+	public static final String FriendConfirm = "*&$friendcfm";
+	public static final String FriendReject = "*&$friendrej";
+	
 	public static final String MakeNewChat = "*&$makenewchat";
 	public static final String LoginSuccess = "*&$loginsucess";
-	public static final String RecieveMessage = "*&$recievemessage";		//server to client for client to recieve and output a message sent to them
+	public static final String RecieveMessage = "*&$addchatmessage";		//server to client for client to recieve and output a message sent to them
+	public static final String SendMessage ="*&$addchatmessage";
 }
