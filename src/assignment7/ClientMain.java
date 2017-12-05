@@ -409,7 +409,7 @@ public final class ClientMain extends Application
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (read==Commands.LoginSuccess)
+				if (read.equals(Commands.LoginSuccess))
 				{
 					usernameLabel.setText(usernameField.getText());
 					userName=usernameField.getText();
@@ -583,7 +583,7 @@ public final class ClientMain extends Application
 				}
 				
 				//if(true)
-				if (read==Commands.LoginSuccess)
+				if (read.equals(Commands.LoginSuccess))
 				{
 					
 					userName=usernameField.getText();
