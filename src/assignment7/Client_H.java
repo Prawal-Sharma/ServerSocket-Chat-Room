@@ -45,7 +45,7 @@ public class Client_H implements Runnable {
 				
 
 			
-				if (event.equals("Create User")) {
+				if (event.equals(Commands.MakeUser)) {
 
 					if (ServerMain.unp.containsKey(chkusername)) {
 						writer.println("exists");
@@ -81,7 +81,7 @@ public class Client_H implements Runnable {
 					}
 				}
 
-				else if (event.equals("Login") && ServerMain.unp.containsKey(chkusername)) {
+				else if (event.equals(Commands.Login) && ServerMain.unp.containsKey(chkusername)) {
 
 					String value = (String) ServerMain.unp.get(chkusername);
 					if (value.equals(chkpassword)) {
