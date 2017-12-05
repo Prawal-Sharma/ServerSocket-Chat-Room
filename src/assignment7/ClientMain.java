@@ -83,7 +83,7 @@ public final class ClientMain extends Application
 	private static TextField friendField;
 	
 	private static TextField friendstochatField;
-	
+	private static HBox startchatHBox;
 	private static TextField changepasswordField;
 	private static Button changepasswordButton;
 	private static Button addfriendButton ;
@@ -103,7 +103,7 @@ public final class ClientMain extends Application
 	
 	
 	private static GridPane signinPane ;
-	private static String userName;
+	private static String userName= new String();
 	private static Label usernameLabel;
 	private static Label passwordLabel;
 	private static TextField usernameField ;
@@ -135,7 +135,11 @@ public final class ClientMain extends Application
 		
 		initjavafx();
 		startliseners();
-	//	mediaplayer=new MediaPlayer(sound);
+		//	mediaplayer=new MediaPlayer(sound);
+		
+	//	configurechatcontrols();
+	//	chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
+		
 		primaryStage.setScene(signinScene);
 		primaryStage.show();
 		
@@ -164,6 +168,7 @@ public final class ClientMain extends Application
 		exitbuttonlistener();
 		
 	}
+	
 	private void addfriendbuttonlistener() {
 		// TODO Auto-generated method stub
 		addfriendButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -438,13 +443,15 @@ public final class ClientMain extends Application
 		chatField = new TextField();
 		friendField = new TextField();
 		changepasswordField = new TextField();
+		friendstochatField = new TextField();
+		startchatHBox= new HBox();
 		changepasswordButton = new Button("Change Password");
 		addfriendButton = new Button("Add Friend");
 		closechatButton = new Button("Close Chat");
 		sendButton = new Button("Send");
 		startchatButton = new Button("Start Chat");
 		exitButton = new Button("Sign out");
-		acceptButton = new Button("Accep Friend Requestt");
+		acceptButton = new Button("Accept Friend Request");
 		denyButton = new Button("Deny Friend Request");
 		friendPane = new GridPane();
 		requestPane = new GridPane();
@@ -454,6 +461,7 @@ public final class ClientMain extends Application
 		signinPane = new GridPane();
 		usernameLabel = new Label("Username:");
 		passwordLabel = new Label("Password:");
+		friendrequestlabel =new Label("");
 		usernameField = new TextField();
 		passwordField = new TextField();
 		loginButton = new Button("Sign In");
@@ -464,19 +472,12 @@ public final class ClientMain extends Application
 		newuserHBox = new HBox();
 		
 		initsigninpane();
-		initcontrolpane();
+		
 		signinScene=new Scene(signinPane );
 		
 	}
 	
-	private void initcontrolpane() {
-		// TODO Auto-generated method stub
-		
-		controlPane.setHgap(24);
-		controlPane.setAlignment(Pos.CENTER);
-		controlPane.add(controlVBox, 0,0 );
-		controlPane.add(chatPane, 1,0);
-	}
+
 
 	private void initsigninpane() {
 		// TODO Auto-generated method stub
@@ -637,10 +638,35 @@ public final class ClientMain extends Application
 	private void configurechatcontrols() 
 	{
 			// TODO Auto-generated method stub
-		
-		
-		
-				
+			friendPane.add(friendField, 0, 0);
+			friendPane.add(addfriendButton,1, 0);
+			friendPane.add(friendrequestlabel, 0, 1);
+			friendPane.add(acceptButton, 1, 1);
+			friendPane.add(denyButton, 2, 1);
+			acceptButton.setDisable(true);
+			denyButton.setDisable(true);
+			startchatHBox.getChildren().add(friendstochatField);
+			startchatHBox.getChildren().add(startchatButton);
+			
+			
+			changePassHBox.getChildren().add(changepasswordField);
+			changePassHBox.getChildren().add(changepasswordButton);
+			usernameLabel.setText(userName);
+			controlVBox.getChildren().addAll(usernameLabel, friendPane, startchatHBox, changePassHBox,closechatButton, exitButton) ;
+			
+			
+			chatArea.setWrapText(true);
+			chatField.setMinHeight(55);
+			
+			chatPane.add(chatArea, 0, 0, 2,1);
+			chatPane.add(sendButton, 1, 1);
+			chatPane.add(chatField,0, 1);
+			
+			
+			controlPane.setHgap(24);
+			controlPane.setAlignment(Pos.CENTER);
+			controlPane.add(controlVBox, 0,0 );
+			controlPane.add(chatPane, 1,0);
 	}
 	
 	/**
