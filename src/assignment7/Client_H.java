@@ -158,7 +158,7 @@ public class Client_H implements Runnable {
 					ArrayList<String> peoplechatting = new ArrayList<String>();
 					System.out.println("Making a new chat");
 					String p;
-					while (!(p = reader.readLine()).equals("no more")) {
+					while (!(p = reader.readLine()).equals(Commands.EndofList)) {
 						peoplechatting.add(p);
 						System.out.println(p);
 					}
@@ -285,14 +285,16 @@ public class Client_H implements Runnable {
 					String b1 = reader.readLine();
 					
 					if (ServerMain.users_connected.containsKey(b1)) {
-						ServerMain.users_connected.get(b1).println("friendadd");
+						ServerMain.users_connected.get(b1).println(Commands.AddFriend);
+						ServerMain.users_connected.get(b1).flush();
+						ServerMain.users_connected.get(b1).println(b1);
 						ServerMain.users_connected.get(b1).flush();
 						ServerMain.users_connected.get(b1).println(username);
 						ServerMain.users_connected.get(b1).flush();
 						
 						friendlist.add(b1);
-						writer.println("newfriend");
-						writer.flush();
+//						writer.println("newfriend");
+//						writer.flush();
 						
 					}
 					
@@ -304,6 +306,21 @@ public class Client_H implements Runnable {
 
 					
 					break;
+				case Commands.FriendConfirm:
+					String b11= reader.readLine();
+					
+					if (ServerMain.users_connected.containsKey(b11)) {
+						ServerMain.users_connected.get(b11).println(Commands.FriendConfirm);
+						ServerMain.users_connected.get(b11).flush();
+						ServerMain.users_connected.get(b11).println(b11);
+						ServerMain.users_connected.get(b11).flush();
+						ServerMain.users_connected.get(b11).println(username);
+						ServerMain.users_connected.get(b11).flush();
+						
+						friendlist.add(b11);
+					}
+					
+					
 					/* eric
 				case "DeleteFriend": 
 					String oldfriend = null;
