@@ -710,6 +710,11 @@ public final class ClientMain extends Application
 		if (chat_reader.ready()) 
 		{
 			command = chat_reader.readLine();
+			friendlistlabel2.setText("");
+			StringBuilder newlabel= new StringBuilder();
+			for (String s : friends){newlabel.append(s + " ");  }
+			friendlistlabel2.setText(newlabel.toString());
+			
 			switch(command) 
 			{
 
@@ -724,10 +729,7 @@ public final class ClientMain extends Application
 					if (!friends.contains(parameter)) 
 					{
 						friends.add(parameter);
-						friendlistlabel2.setText("");
-						StringBuilder newlabel= new StringBuilder();
-						for (String s : friends){newlabel.append(s + " ");  }
-						friendlistlabel2.setText(newlabel.toString());
+						
 
 
 					}
@@ -800,11 +802,9 @@ public final class ClientMain extends Application
 	{
 		
 		//String retstr= new String (Base64.getUrlEncoder().encodeToString(str.getBytes()) );
-		char [] a=str.toCharArray();
-		for (int i =0 ; i<a.length; i++)
-		{
-			a[i]+=offset; 
-		}
+		StringBuilder a = new StringBuilder();
+		a.append("a");
+		a.append(str);
 		
 		
 		return a.toString();
@@ -814,12 +814,8 @@ public final class ClientMain extends Application
 	{
 		
 		//String retstr= new String( Base64.getUrlDecoder().decode(str));
-		char[] b = str.toCharArray();
-		for (int i=0; i<b.length; i++)
-		{
-			b[i]+=offset;
-		}
-		return b.toString();
+		
+		return str.substring(1);
 	}
 	
 	
