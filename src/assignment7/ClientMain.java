@@ -278,6 +278,7 @@ public final class ClientMain extends Application
 				// TODO Auto-generated method stub
 				listener.stop();
 				String friend= friendrequestlabel.getText();
+				friends.add(friend);
 				friendrequestlabel.setText("");				//clear the label
 				chat_writer.println(Commands.FriendConfirm);
 				chat_writer.flush();
@@ -784,16 +785,16 @@ public final class ClientMain extends Application
 	private static String encode(String str, int offset)
 	{
 		
-		String retstr= new String (Base64.getUrlEncoder().encodeToString(str.getBytes()) );
+		//String retstr= new String (Base64.getUrlEncoder().encodeToString(str.getBytes()) );
 		
-		return retstr;
+		return str;
 		
 	}
 	private static String decode(String str, int offset)
 	{
 		
-		String retstr= new String( Base64.getUrlDecoder().decode(str));
-		return retstr;
+		//String retstr= new String( Base64.getUrlDecoder().decode(str));
+		return str;
 		
 	}
 	
