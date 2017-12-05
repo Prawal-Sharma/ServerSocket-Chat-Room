@@ -55,7 +55,7 @@ public class Client_H implements Runnable {
 
 					else {
 
-						writer.println("Success");
+						writer.println(Commands.LoginSuccess);
 						writer.flush();
 
 						password = chkpassword;
@@ -85,7 +85,7 @@ public class Client_H implements Runnable {
 
 					String value = (String) ServerMain.unp.get(chkusername);
 					if (value.equals(chkpassword)) {
-						writer.println("Success");
+						writer.println(Commands.LoginSuccess);
 						writer.flush();
 						password = chkpassword;
 						username = chkusername;
@@ -179,7 +179,7 @@ public class Client_H implements Runnable {
 					System.out.println(qq + "check ");
 
 					if (qq) {
-						writer.println("UpdateChat\n" + g);
+						writer.println(Commands.UpdateChat+"\n" + g);
 						
 						Scanner updation = new Scanner(checker);
 						while (updation.hasNextLine()) {
@@ -188,7 +188,7 @@ public class Client_H implements Runnable {
 
 						}
 						updation.close();
-						writer.println("qwertyuiop");
+						writer.println(Commands.StopUpdating);
 					}
 
 					if (!ServerMain.message_list.isEmpty()) {
@@ -213,7 +213,7 @@ public class Client_H implements Runnable {
 					
 					break;
 					// eric
-				case "End Chat":
+				case Commands.CloseChat:
 					String b = reader.readLine();
 					ServerMain.message_list.get(b).deleteObserver(ServerMain.users_connected.get(username));
 
@@ -248,7 +248,7 @@ public class Client_H implements Runnable {
 					break;
 				
 				// eric 
-				case "FriendList":
+				case Commands.GetFriendList:
 					if (!friendlist.isEmpty()) {
 						for (String jk : friendlist) {
 							writer.println(jk);
@@ -274,14 +274,14 @@ public class Client_H implements Runnable {
 					}
 					sc.close();
 
-					writer.println("Overf");
+					writer.println(Commands.EndofList);
 					writer.flush();
 
 					break;
 					
 					// eric
 					
-				case "AddFriend": 
+				case Commands.AddFriend: 
 					String b1 = reader.readLine();
 					
 					if (ServerMain.users_connected.containsKey(b1)) {
@@ -304,7 +304,7 @@ public class Client_H implements Runnable {
 
 					
 					break;
-					// eric
+					/* eric
 				case "DeleteFriend": 
 					String oldfriend = null;
 					while (((oldfriend = reader.readLine()) == null)) {
@@ -320,9 +320,11 @@ public class Client_H implements Runnable {
 					}
 
 					break;
+					
+			*/
 					// eric
-				case "Addchit":
-					System.out.println("entering addchit");
+				case Commands.SendMessage:
+					System.out.println(Commands.RecieveMessage);
 					String identifier = reader.readLine();
 					System.out.println("q not null");
 					String message = reader.readLine();

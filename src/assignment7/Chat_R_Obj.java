@@ -47,7 +47,7 @@ public class Chat_R_Obj extends Observable {
 		}
 		Scanner read = new Scanner(getter);
 		setChanged();
-		notifyObservers("UpdateChat\n"+name_of_chat);
+		notifyObservers(Commands.UpdateChat+"\n"+name_of_chat);
 		System.out.println("Outputing previous convo");
 		
 		while (read.hasNextLine()){
@@ -55,7 +55,7 @@ public class Chat_R_Obj extends Observable {
 		}   
 		setChanged();
 			// secret code
-		    notifyObservers("qwertyuiop");
+		    notifyObservers(Commands.StopUpdating);
 			read.close();
 	}
 	
@@ -75,7 +75,7 @@ public class Chat_R_Obj extends Observable {
 		setChanged();
 	  System.out.println("Letting Observers Know");
 	  		
-		notifyObservers("Addchit\n"+name_of_chat+"\n"+update_message+"\n");
+		notifyObservers(Commands.RecieveMessage+"\n"+name_of_chat+"\n"+update_message+"\n");
 		System.out.println("UC"+name_of_chat);
 		System.out.println(update_message);
 		File random;
