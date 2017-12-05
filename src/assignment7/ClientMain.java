@@ -301,7 +301,8 @@ public final class ClientMain extends Application
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				listener.stop();
-				
+				chat_writer.println(Commands.MakeNewChat);
+				chat_writer.flush();
 				String recipients[]= friendstochatField.getText().split(",");
 				
 				for (String s: recipients)

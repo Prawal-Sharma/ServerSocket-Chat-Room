@@ -4,9 +4,9 @@ import java.net.*;
 import java.util.*;
 
 public class Chat_R_Obj extends Observable {
-	public String name_of_chat = ""; 
+	public String name_of_chat = new String(""); 
 	public ArrayList<String> chatters_in_order; 
-	public String time = ""; 
+	public String time = new String(""); 
 	public int number_of_chat; 
 	
 	Chat_R_Obj(ArrayList<String> chatters) throws FileNotFoundException{
@@ -14,17 +14,27 @@ public class Chat_R_Obj extends Observable {
 			number_of_chat=ServerMain.num_chat;
 			ServerMain.num_chat+=1;
 			chatters_in_order = new ArrayList<String>();
-			for(int i = 0; i < chatters.size(); i++) {
-				chatters_in_order.add(chatters.get(i));
+			//for(int i = 0; i < chatters.size(); i++) {
+			//	chatters_in_order.add(chatters.get(i));
+			//}
+			
+			for (String s: chatters){
+				chatters_in_order.add(s);
 			}
 			
 			
 			Collections.sort(chatters_in_order);
-			for(int i = 0; i < chatters_in_order.size(); i++) {
-				name_of_chat += chatters_in_order.get(i); 
+			//for(int i = 0; i < chatters_in_order.size(); i++) {
+				//name_of_chat += chatters_in_order.get(i); 
+			//}
+			
+			for (String c: chatters_in_order){
+				name_of_chat+=c;
+				
 			}
 			
 			System.out.println("Non_Empty Convo");
+			System.out.println("name_of_chat: " + name_of_chat);
 		
 	ServerMain.message_list.put(name_of_chat, this);
 			

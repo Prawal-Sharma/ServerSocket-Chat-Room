@@ -122,14 +122,14 @@ public class Client_H implements Runnable {
 		}
 
 		while (loggedin) {
-			System.out.println("Here");
+			System.out.println("LoggIn");
 			String command = "";
 			try {
 
 				while ((command = reader.readLine()) == null) {
 					Thread.sleep(150);
 				}
-				System.out.println("should switch");
+				System.out.println("switch commands");
 				switch (command) {
 				
 				
@@ -154,7 +154,7 @@ public class Client_H implements Runnable {
 					break;
 					
 				case Commands.MakeNewChat:
-
+					
 					ArrayList<String> peoplechatting = new ArrayList<String>();
 					System.out.println("Making a new chat");
 					String p;
@@ -206,7 +206,7 @@ public class Client_H implements Runnable {
 						}
 					}
 					if (ServerMain.message_list.isEmpty()) {
-
+						System.out.println("new Chat_R_Obj");
 						new Chat_R_Obj(peoplechatting);
 					}
 
@@ -316,44 +316,38 @@ public class Client_H implements Runnable {
 						ServerMain.users_connected.get(b11).flush();
 						ServerMain.users_connected.get(b11).println(username);
 						ServerMain.users_connected.get(b11).flush();
-						
+						System.out.println("added " + b11);
 						friendlist.add(b11);
 					}
 					
-					
-					/* eric
-				case "DeleteFriend": 
-					String oldfriend = null;
-					while (((oldfriend = reader.readLine()) == null)) {
-					}
-					while (!(oldfriend.equals("Over"))) {
-						for (int l = 0; l < friendlist.size(); l++) {
-							if (friendlist.get(l).equals(oldfriend)) {
-								friendlist.remove(l);
-
-							}
-						}
-						oldfriend = reader.readLine();
-					}
-
-					break;
-					
-			*/
-					// eric
+				
 				case Commands.SendMessage:
+					
+					
 					System.out.println(Commands.RecieveMessage);
 					String identifier = reader.readLine();
-					System.out.println("q not null");
+					// testing
+					System.out.println("identified: " + identifier);
+					System.out.println("identifier not null");
 					String message = reader.readLine();
-					System.out.println("r not null");
-					ServerMain.message_list.get(identifier).ChatUpdate(message);
-					System.out.println("s not null");
+					// testing
+					System.out.println("message: " + message);
+					System.out.println("message not null");
+					//testing
+					//ServerMain.message_list.get(identifier).ChatUpdate(message);
+					for(String key : ServerMain.message_list.keySet()) {
+						System.out.println("Message_List: " + key);
+					}
+					Chat_R_Obj dummy = ServerMain.message_list.get(identifier);
+					System.out.println("Message_List value: " + dummy);
+					dummy.ChatUpdate(message);
+					System.out.println("message_list not null");
 
 					break;
 
 				}
-			} catch (Exception k) {
-				k.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 		}
