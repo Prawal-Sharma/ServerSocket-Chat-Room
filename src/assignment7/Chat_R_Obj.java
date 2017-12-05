@@ -14,49 +14,54 @@ public class Chat_R_Obj extends Observable {
 			number_of_chat=ServerMain.num_chat;
 			ServerMain.num_chat+=1;
 			chatters_in_order = new ArrayList<String>();
-			for (String s: chatters){
-				chatters_in_order.add(s);
+			for(int i = 0; i < chatters.size(); i++) {
+				chatters_in_order.add(chatters.get(i));
 			}
 			
+			
 			Collections.sort(chatters_in_order);
-			for (String g: chatters_in_order){
-				name_of_chat+=g;
-				
+			for(int i = 0; i < chatters_in_order.size(); i++) {
+				name_of_chat += chatters_in_order.get(i); 
 			}
-			System.out.println("Conversation Is Not Empty");
+			
+			System.out.println("Non_Empty Convo");
 		
 	ServerMain.message_list.put(name_of_chat, this);
 			
 		}
-		for(String p : chatters){
-			 System.out.println("Not a null value");
-			this.addObserver(ServerMain.users_connected.get(p));
+		
+		for(int i = 0; i < chatters.size(); i++) {
+			System.out.println("Not a null value");
+			this.addObserver(ServerMain.users_connected.get(chatters.get(i)));
 		}
+		
 		
 		
 	}
 	
 	
 	public void LogPrint(String arg) throws IOException{
-		File tracker = new File(ServerMain.Info.getAbsolutePath()+java.io.File.separator+arg+".txt");
-		if(!tracker.exists()){
-			tracker.createNewFile();
+		File getter = new File(ServerMain.Info.getAbsolutePath()+java.io.File.separator+arg+".txt");
+		if(getter.exists() == false){
+			getter.createNewFile();
 		}
-		Scanner read = new Scanner(tracker);
+		Scanner read = new Scanner(getter);
 		setChanged();
 		notifyObservers("UpdateChat\n"+name_of_chat);
-		System.out.println("Printing old cha");
+		System.out.println("Outputing previous convo");
 		
 		while (read.hasNextLine()){
 			Updater(read.nextLine());
-		}   setChanged();
-		    notifyObservers("zxcvbnm");
+		}   
+		setChanged();
+			// secret code
+		    notifyObservers("qwertyuiop");
 			read.close();
 	}
 	
 	public void Updater(String update_message) throws IOException{
-		time+=update_message;
-		 System.out.println("updatec not null");
+		time = time + update_message;
+		 System.out.println("Updater is not null");
 		 System.out.println(name_of_chat);
 		setChanged();
 		
@@ -65,31 +70,35 @@ public class Chat_R_Obj extends Observable {
 	
 	
 	public void ChatUpdate(String update_message) throws IOException{
-		time+=update_message;
+		time = time + update_message;
 		
 		setChanged();
-	  System.out.println("Notifying observers");
+	  System.out.println("Letting Observers Know");
+	  		
 		notifyObservers("Addchit\n"+name_of_chat+"\n"+update_message+"\n");
 		System.out.println("UC"+name_of_chat);
 		System.out.println(update_message);
-		File nonsense;
-		PrintWriter convotracker;
-       nonsense = new File(ServerMain.Info.getAbsolutePath()+java.io.File.separator+name_of_chat+".txt");
-       if(!nonsense.exists()){
-    	   nonsense.createNewFile();
+		File random;
+		PrintWriter c_track;
+       random = new File(ServerMain.Info.getAbsolutePath()+java.io.File.separator+name_of_chat+".txt");
+       if(random.exists() == false){
+    	   random.createNewFile();
        }
         try {
-			convotracker = new PrintWriter(new FileWriter(nonsense,true));
+			c_track = new PrintWriter(new FileWriter(random,true));
 			
 		
-		 convotracker.append(update_message);
-		 convotracker.append("\n");
-		 convotracker.close();
+		 c_track.append(update_message);
+		 c_track.append("\n");
+		 c_track.close();
         } catch (FileNotFoundException e) {
 			
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 	
 
 }
