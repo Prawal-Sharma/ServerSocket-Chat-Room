@@ -637,7 +637,23 @@ public final class ClientMain extends Application
 	
 	private void configurechatcontrols() 
 	{
-			// TODO Auto-generated method stub
+			
+		controlPane.setAlignment(Pos.CENTER);
+		controlPane.setPadding(new Insets(30,30,30,30));
+		 Text title = new Text("Chat");
+	        title.setFont(Font.font("Helvetica", 45));
+	        title.setFill(Color.BLUE);
+	        VBox titleBox = new VBox();
+
+	        titleBox.setPadding(new Insets(0,0,0,0));
+	        titleBox.getChildren().add(title);
+	        titleBox.setAlignment(Pos.CENTER);
+		
+		Stop[] stops = new Stop[] { new Stop(0, Color.rgb(204, 255, 204)), new Stop(1, Color.WHITE)};
+		LinearGradient gradient = new LinearGradient(0,0, 0,1.5, true, CycleMethod.NO_CYCLE, stops);
+	    controlPane.setBackground(new Background(new BackgroundFill(gradient, null, new Insets(-10))));
+		
+		
 			friendPane.add(friendField, 0, 0);
 			friendPane.add(addfriendButton,1, 0);
 			friendPane.add(friendrequestlabel, 0, 1);
@@ -662,11 +678,13 @@ public final class ClientMain extends Application
 			chatPane.add(sendButton, 1, 1);
 			chatPane.add(chatField,0, 1);
 			
-			
+			controlPane.add(titleBox, 0,0 );
 			controlPane.setHgap(24);
 			controlPane.setAlignment(Pos.CENTER);
-			controlPane.add(controlVBox, 0,0 );
-			controlPane.add(chatPane, 1,0);
+			controlPane.add(controlVBox, 0,1 );
+			controlPane.add(chatPane, 1,1);
+			
+			
 	}
 	
 	/**
