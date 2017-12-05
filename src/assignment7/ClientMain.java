@@ -81,6 +81,8 @@ public final class ClientMain extends Application
 	private static TextArea chatArea ;
 	private static TextField chatField ;
 	private static TextField friendField;
+	private static Label friendlistlabel = new Label("friends list");
+	private static Label friendlistlabel2= new Label();
 	
 	private static TextField friendstochatField;
 	private static HBox startchatHBox;
@@ -288,6 +290,11 @@ public final class ClientMain extends Application
 				chat_writer.flush();
 				acceptButton.setDisable(true);
 				denyButton.setDisable(true);				//diable the buttons
+				friendlistlabel2.setText("");
+				StringBuilder newlabel= new StringBuilder();
+				for (String s : friends){newlabel.append(s + " ");  }
+				friendlistlabel2.setText(newlabel.toString());
+				
 				listener.play();
 			}	
 			
@@ -661,6 +668,9 @@ public final class ClientMain extends Application
 			friendPane.add(friendrequestlabel, 0, 1);
 			friendPane.add(acceptButton, 1, 1);
 			friendPane.add(denyButton, 2, 1);
+			friendPane.add(friendlistlabel, 0, 2);
+			friendPane.add(friendlistlabel2, 1,2);
+
 			acceptButton.setDisable(true);
 			denyButton.setDisable(true);
 			startchatHBox.getChildren().add(friendstochatField);
@@ -714,6 +724,10 @@ public final class ClientMain extends Application
 					if (!friends.contains(parameter)) 
 					{
 						friends.add(parameter);
+						friendlistlabel2.setText("");
+						StringBuilder newlabel= new StringBuilder();
+						for (String s : friends){newlabel.append(s + " ");  }
+						friendlistlabel2.setText(newlabel.toString());
 
 
 					}
@@ -786,16 +800,26 @@ public final class ClientMain extends Application
 	{
 		
 		//String retstr= new String (Base64.getUrlEncoder().encodeToString(str.getBytes()) );
+		char [] a=str.toCharArray();
+		for (int i =0 ; i<a.length; i++)
+		{
+			a[i]+=offset; 
+		}
 		
-		return str;
+		
+		return a.toString();
 		
 	}
 	private static String decode(String str, int offset)
 	{
 		
 		//String retstr= new String( Base64.getUrlDecoder().decode(str));
-		return str;
-		
+		char[] b = str.toCharArray();
+		for (int i=0; i<b.length; i++)
+		{
+			b[i]+=offset;
+		}
+		return b.toString();
 	}
 	
 	
