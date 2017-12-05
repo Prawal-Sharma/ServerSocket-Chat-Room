@@ -81,7 +81,7 @@ public final class ClientMain extends Application
 	private static TextArea chatArea ;
 	private static TextField chatField ;
 	private static TextField friendField;
-	private static Label friendlistlabel = new Label("friends list");
+	private static Label friendlistlabel = new Label("friends list: ");
 	private static Label friendlistlabel2= new Label();
 	
 	private static TextField friendstochatField;
@@ -120,8 +120,12 @@ public final class ClientMain extends Application
 	private static Timeline listener;
 	private static int encryptionoffset = 1;
 	
-//	private Media sound = new Media (new File("ding.wav").toURI().toString());
-//	private MediaPlayer mediaplayer;
+	private Media sound = new Media (new File("disconnect_x.wav").toURI().toString());
+	private Media sound2 = new Media (new File("boing2.wav").toURI().toString());
+	private Media sound3 = new Media (new File("cheering.wav").toURI().toString());
+	private Media sound4 = new Media (new File("ahem_x.wav").toURI().toString());
+	
+	private MediaPlayer mediaplayer;
 	private static String command;
 	private static String parameter;
 	private static String activeconversation;
@@ -190,7 +194,8 @@ public final class ClientMain extends Application
 					chat_writer.println(userName);
 					chat_writer.flush();
 					friendField.clear();
-				
+					mediaplayer=new MediaPlayer(sound4);
+					mediaplayer.play();
 					listener.play();
 					
 				}
@@ -294,7 +299,8 @@ public final class ClientMain extends Application
 				StringBuilder newlabel= new StringBuilder();
 				for (String s : friends){newlabel.append(s + " ");  }
 				friendlistlabel2.setText(newlabel.toString());
-				
+				mediaplayer=new MediaPlayer(sound3);
+				mediaplayer.play();
 				listener.play();
 			}	
 			
@@ -436,6 +442,8 @@ public final class ClientMain extends Application
 						catch (IOException e) { e.printStackTrace(); }
 					}));
 					listener.setCycleCount(Animation.INDEFINITE);
+					mediaplayer=new MediaPlayer(sound);
+					mediaplayer.play();
 					listener.play();
 				}
 
@@ -556,6 +564,7 @@ public final class ClientMain extends Application
 
 			@Override
 			public void handle(ActionEvent event) {
+				
 				// TODO Auto-generated method stub
 				if (socketconnected == false) 
 				{
@@ -596,7 +605,9 @@ public final class ClientMain extends Application
 				{
 					
 					userName=usernameField.getText();
-					
+					// PUT SOUND
+					mediaplayer=new MediaPlayer(sound);
+					mediaplayer.play();
 					configurechatcontrols();
 					
 					chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
@@ -638,6 +649,8 @@ public final class ClientMain extends Application
 				chat_writer.println(userName+ ": "+encode(chatField.getText(), encryptionoffset));
 				chat_writer.flush();
 				chatField.setText("");
+				mediaplayer=new MediaPlayer(sound2);
+				mediaplayer.play();
 				listener.play();
 			}
 			
@@ -710,10 +723,7 @@ public final class ClientMain extends Application
 		if (chat_reader.ready()) 
 		{
 			command = chat_reader.readLine();
-			friendlistlabel2.setText("");
-			StringBuilder newlabel= new StringBuilder();
-			for (String s : friends){newlabel.append(s + " ");  }
-			friendlistlabel2.setText(newlabel.toString());
+			
 			
 			switch(command) 
 			{
@@ -721,7 +731,7 @@ public final class ClientMain extends Application
 			case Commands.FriendConfirm:
 				parameter=chat_reader.readLine();
 
-				if (parameter==userName)
+				if (parameter.equals(userName))
 				{
 
 
@@ -729,6 +739,10 @@ public final class ClientMain extends Application
 					if (!friends.contains(parameter)) 
 					{
 						friends.add(parameter);
+						friendlistlabel2.setText("");
+						StringBuilder newlabel= new StringBuilder();
+						for (String s : friends){newlabel.append(s + " ");  }
+						friendlistlabel2.setText(newlabel.toString());
 						
 
 
@@ -803,8 +817,9 @@ public final class ClientMain extends Application
 		
 		//String retstr= new String (Base64.getUrlEncoder().encodeToString(str.getBytes()) );
 		StringBuilder a = new StringBuilder();
-		a.append("a");
+		
 		a.append(str);
+		a.append("a");
 		
 		
 		return a.toString();
@@ -815,7 +830,7 @@ public final class ClientMain extends Application
 		
 		//String retstr= new String( Base64.getUrlDecoder().decode(str));
 		
-		return str.substring(1);
+		return str.substring(0, str.length()-1);
 	}
 	
 	
