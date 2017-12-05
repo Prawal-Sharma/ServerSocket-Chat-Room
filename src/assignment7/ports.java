@@ -24,6 +24,6 @@ public final class ports{
 	
 	
 	public static final int login= 8887;
-	public static final int chat= 8888;
+	public static final int chat= 8884;
 	
 }

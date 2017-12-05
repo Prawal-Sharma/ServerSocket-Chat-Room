@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-
+import assignment7.Commands;
 
 
 import javafx.animation.Animation;
@@ -76,7 +76,7 @@ public final class ClientMain extends Application
 	private static Stage newStage;
 	private static Scene signinScene;
 	private static Scene chatScene;
-	private static GridPane scenePane ;
+	
 	private static GridPane controlPane ;
 	private static TextArea chatArea ;
 	private static TextField chatField ;
@@ -94,7 +94,7 @@ public final class ClientMain extends Application
 	private static Button acceptButton ;
 	private static Button denyButton ;
 	private static GridPane friendPane ;
-	private static GridPane requestPane;
+
 	private static GridPane chatPane;
 	private static HBox changePassHBox ;
 	private static VBox controlVBox ;
@@ -136,7 +136,7 @@ public final class ClientMain extends Application
 		initjavafx();
 		startliseners();
 		//	mediaplayer=new MediaPlayer(sound);
-		
+		newStage =primaryStage;
 	//	configurechatcontrols();
 	//	chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
 		
@@ -436,7 +436,7 @@ public final class ClientMain extends Application
 
 	private void initjavafx()
 	{
-		scenePane = new GridPane();
+		
 		controlPane = new GridPane();
 		chatArea = new TextArea();
 		chatArea.setWrapText(true);
@@ -454,7 +454,7 @@ public final class ClientMain extends Application
 		acceptButton = new Button("Accept Friend Request");
 		denyButton = new Button("Deny Friend Request");
 		friendPane = new GridPane();
-		requestPane = new GridPane();
+		
 		chatPane = new GridPane();
 		changePassHBox = new HBox();
 		controlVBox = new VBox();
@@ -523,7 +523,7 @@ public final class ClientMain extends Application
 		try 
 		{
 		//	login_socket= new Socket(ports.host, ports.login);
-			chat_socket= new Socket(ports.host,ports.login);
+			chat_socket= new Socket(ports.host,ports.chat);
 		}
 		catch (Exception e){e.printStackTrace();}
 		
@@ -582,17 +582,17 @@ public final class ClientMain extends Application
 					e.printStackTrace();
 				}
 				
-				if(true)
-				//if (read==Commands.LoginSuccess)
+				//if(true)
+				if (read==Commands.LoginSuccess)
 				{
-					usernameLabel.setText(usernameField.getText());
+					
 					userName=usernameField.getText();
 					
 					configurechatcontrols();
 					
 					chatScene= new Scene(controlPane,Toolkit.getDefaultToolkit().getScreenSize().getWidth(),Toolkit.getDefaultToolkit().getScreenSize().getHeight());  		//make full screen
 					newStage.setScene(chatScene);
-					newStage.show();
+			newStage.show();
 				
 					//setup a listener that polls server every .2 seconds
 					listener = new Timeline(new KeyFrame(Duration.seconds(0.2), ae -> 
