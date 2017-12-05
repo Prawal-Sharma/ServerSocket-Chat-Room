@@ -83,9 +83,12 @@ public final class ClientMain extends Application
 	private static TextField friendField;
 	private static Label friendlistlabel = new Label("friends list: ");
 	private static Label friendlistlabel2= new Label();
-	
+	private static Label encryptionLabel = new Label("Encryption channel");
+	private static TextField encryptionField = new TextField();
+	private static Button encryptionButton = new Button("Encrypt");
 	private static TextField friendstochatField;
 	private static HBox startchatHBox;
+	private static HBox encryptionHBox = new HBox();
 	private static TextField changepasswordField;
 	private static Button changepasswordButton;
 	private static Button addfriendButton ;
@@ -172,9 +175,27 @@ public final class ClientMain extends Application
 		denybuttonlistener();
 		changepassowrdlistener();
 		exitbuttonlistener();
+		encryptionbuttonlistener();
 		
 	}
 	
+	private void encryptionbuttonlistener() {
+		
+		encryptionButton.setOnAction( new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				listener.stop();
+				encryptionoffset= Integer.parseInt(encryptionField.getText());
+				
+				listener.play();
+				
+			}
+			
+		});
+	}
+
 	private void addfriendbuttonlistener() {
 		// TODO Auto-generated method stub
 		addfriendButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -693,7 +714,11 @@ public final class ClientMain extends Application
 			changePassHBox.getChildren().add(changepasswordField);
 			changePassHBox.getChildren().add(changepasswordButton);
 			usernameLabel.setText(userName);
-			controlVBox.getChildren().addAll(usernameLabel, friendPane, startchatHBox, changePassHBox,closechatButton, exitButton) ;
+			encryptionHBox.getChildren().add(encryptionLabel);
+			encryptionHBox.getChildren().add(encryptionField);
+			encryptionHBox.getChildren().add(encryptionButton);
+			
+			controlVBox.getChildren().addAll(usernameLabel, friendPane, startchatHBox, changePassHBox,closechatButton, encryptionHBox, exitButton) ;
 			
 			
 			chatArea.setWrapText(true);
@@ -819,8 +844,10 @@ public final class ClientMain extends Application
 		StringBuilder a = new StringBuilder();
 		
 		a.append(str);
-		a.append("a");
 		
+		for (int i=0; i<encryptionoffset; i++) {
+			a.append("$");
+		}
 		
 		return a.toString();
 		
@@ -830,7 +857,7 @@ public final class ClientMain extends Application
 		
 		//String retstr= new String( Base64.getUrlDecoder().decode(str));
 		
-		return str.substring(0, str.length()-1);
+		return str.substring(0, str.length()-encryptionoffset);
 	}
 	
 	
