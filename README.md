@@ -1,7 +1,3 @@
-Prawal Sharma : ps27933
-Eric Su : es34826
-
-git url: https://github.com/EE422C-F17-HW3/422c-proj7-F17-422c-pr7-f17-pair10
 
 Files:
 1) Chat_R_Obj.java
